@@ -1,68 +1,100 @@
 let num1 = '';
 let num2 = '';
-let operator = '';
+let op = '';
 let total = '';
 
 $(document).ready(function () {
 
     $('button').on('click', function (e) {
+
         let btn = e.target.innerHTML;
-        if (btn >= '0' && btn <= '9') {
-            handleNumber(btn);
+
+        if (btn >= '0' && btn <= "9" || btn == '.') {
+            handleNum(btn);
+        }
+        else if (btn === 'Clear') {
+            num1 = num2 = op = total = '';
+            displayButton(total);
         }
         else {
-            handleOperator(btn);
+            handleOp(btn);
         }
     });
+
 });
 
-
-
-function handleNumber(num) {
-    if (num1 === '') {
-        num1 = num;
+function handleNum(num) {
+    if (op === "") {
+        num1 += num;
+        displayButton(num1);
     }
     else {
-        num2 = num;
-    }
-    displayButton(num);
-}
-
-function handleOperator(oper) {
-    if (operator === '') {
-        operator = oper;
-    }
-    else {
-        handleTotal();
-        operator = oper;
+        num2 += num;
+        displayButton(num1 + op + num);
     }
 }
 
-function handleTotal() {
-    switch (operator) {
-        case '+': total += +num1 + +num2;
-            displayButton(total);
+function handleOp(oper) {
+    if (op === "") {
+        op = oper;
+    }
+    else {
+        handletotal();
+        op = oper;
+    }
+
+}
+
+function handletotal() {
+    switch (op) {
+
+        case '+':
+            total = +num1 + +num2;
+
             break;
-        case '-': total += +num1 - +num2;
-            displayButton(total);
+
+        case '-':
+            total = +num1 - +num2;
+
             break;
-        case '/': total += +num1 / +num2;
-            displayButton(total);
+
+        case '/':
+            total = +num1 / +num2;
+
             break;
-        case '*': total += +num1 * +num2;
-            displayButton(total);
+
+        case 'X':
+            total = +num1 * +num2;
+
+            break;
+
+        case '%':
+            total = +num1 % +num2;
+
+            break;
+        case '^':
+            total = Math.pow(+num1, +num2);
+
             break;
 
     }
+
+    displayButton(total);
 
     updateVariables();
+
+
 }
 
 function displayButton(btn) {
-    $('.input').text(btn);
+    if (btn == '')
+        $('.input').text(0);
+    else
+        $('.input').text(btn);
+
 }
 
 function updateVariables() {
-    num1 += total;
-    num2 = '';
+    num1 = total;
+    num2 = "";
 }
